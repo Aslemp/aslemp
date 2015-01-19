@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head></h:head>
+<h:body>
+	<h:form id="frmProducto">		
+		<f:loadBundle basename="sio" var="label" />						
+		<!--Campos -->				
+		<p:panel id="pnlProducto" header="${label['producto.titulo']}" style="text-align: center;"/>
+		
+		<p:panelGrid columns="2" id="infoCodigoProducto">
+			<p:outputLabel value="${label['etiquetaRequerido']} ${label['producto.codigo']}" />
+				<p:inputText value="#{productoBean.producto.codigo}" required="true"
+							 requiredMessage="${label['mensajeRequerido']}"/>
+		</p:panelGrid>
+		
+		<p:panelGrid columns="4" id="infoProducto">						
+			<p:outputLabel value="${label['producto.nombre']}" />
+			<p:inputText value="#{productoBean.producto.nombre}"/>
+			
+			<p:outputLabel value="${label['producto.lote']}" />
+			<p:inputText value="#{productoBean.producto.lote}"/>
+									
+			<p:outputLabel value="${label['producto.peso']}" />
+			<p:inputText value="#{productoBean.producto.peso}"/>
+			
+			<p:outputLabel value="${label['producto.promedioVenta']}" />
+			<p:inputText value="#{productoBean.producto.promedioVenta}"/>
+			
+			<p:outputLabel value="${label['etiquetaRequerido']} ${label['producto.cantidadComponente']}" />
+			<p:inputText value="#{productoBean.producto.cantidadComponente}" required="true"
+						 requiredMessage="${label['mensajeRequerido']}"/>
+			
+			<p:outputLabel value="${label['producto.tiempoEntrega']}" />
+			<p:inputText value="#{productoBean.producto.tiempoEntrega}"/>
+			
+			<p:outputLabel value="${label['producto.ubicacion']}" />
+			<p:inputText value="#{productoBean.producto.ubicacion}"/>
+			
+			<p:outputLabel value="${label['etiquetaRequerido']} ${label['producto.unidadMedida']}" />
+			<p:selectOneMenu id="listaUnidadMedida"
+				value="#{productoBean.idUnidadMedidaSeleccionada}" required="true"
+						 requiredMessage="${label['mensajeRequerido']}">				
+				<f:selectItem itemValue="" itemLabel="#{label['label_seleccione']}" />
+				<f:selectItems value="#{productoBean.listaUnidadesMedida}"
+							   var="unidadMedida"							
+							   itemValue="#{unidadMedida.idUnidad}"
+							   itemLabel="${unidadMedida.nombre}"/>						
+			</p:selectOneMenu>			
+			
+			<p:outputLabel value="${label['etiquetaRequerido']} ${label['producto.proveedor']}" />			
+			<p:selectOneMenu id="listaProveedores"
+				value="#{productoBean.idProveedorSeleccionado}" required="true"
+						 requiredMessage="${label['mensajeRequerido']}">>				
+				<f:selectItem itemValue="" itemLabel="#{label['label_seleccione']}" />
+				<f:selectItems value="#{productoBean.listaProveedores}"
+							   var="proveedor"							
+							   itemValue="#{proveedor.idProveedor}"
+							   itemLabel="${proveedor.nombre}"/>						
+			</p:selectOneMenu>
+			
+			<p:outputLabel value="${label['etiquetaRequerido']} ${label['producto.grupo']}" />			
+			<p:selectOneMenu id="listaGrupos"
+				value="#{productoBean.idGrupoSeleccionado}" required="true"
+						 requiredMessage="${label['mensajeRequerido']}">				
+				<f:selectItem itemValue="" itemLabel="#{label['label_seleccione']}" />
+				<f:selectItems value="#{productoBean.listaGrupos}"
+							   var="grupo"							
+							   itemValue="#{grupo.idGrupo}"
+							   itemLabel="${grupo}"/>						
+			</p:selectOneMenu>		
+		</p:panelGrid>
+		
+		<p:panelGrid columns="2" style="text-align: center;">			
+			<p:commandButton id="cmdGuardarProducto" 
+				value="Guardar" action="#{productoBean.guardarProducto}" 
+				update="messages,infoCodigoProducto,infoProducto"/>					
+		</p:panelGrid>
+		<p:messages id="messages" autoUpdate="true" closable="true" />
+	</h:form>
+	
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+	 
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+	    <p:graphicImage name="../imagenes/ajax-loader.gif" />
+	</p:dialog>
+</h:body>
+</html>

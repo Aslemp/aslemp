@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head></h:head>
+<h:body>	
+	<h:form id="frmReporteProductos">
+		<f:loadBundle basename="sio" var="label" />						
+		<!--Campos -->				
+		<p:panel id="pnlRepProductos" header="${label['reporteProductos.titulo']}" style="text-align: center;"/>
+									
+		<p:panel id="pnlTablaReporteProductos" header="${label['reporteProductos.tablaReporte']}" style="margin-bottom:20px">
+			<p:panelGrid columns="1" id="pnlGridTablaReporteProductos">	
+				
+				<p:dataTable id="tablaReporteProductos"
+							 value="#{reporteEntradaSalidaMercanciaBean.listaProductos}" 
+							 var="registroProductos" paginator="true" rows="10" 
+							 emptyMessage="${label['tabla.vacia']}" 
+							 paginatorPosition="bottom" 
+							 rowsPerPageTemplate="5,10,15"
+							 rowKey="#{registroProductos.idProducto}"							 								 						
+							 currentPageReportTemplate="{currentPage} de {totalPages}">
+							 													       				
+					<p:column headerText="${label['reporteProductos.tabla.codigoProducto']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{registroProductos.codigo}" />
+					</p:column>
+					<p:column headerText="${label['reporteProductos.tabla.nombreProducto']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{registroProductos.nombre}" />
+					</p:column>
+					<p:column headerText="${label['reporteProductos.tabla.loteProducto']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{registroProductos.lote}" />
+					</p:column>
+					<p:column headerText="${label['reporteProductos.tabla.saldo']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{registroProductos.saldo}" />
+					</p:column>
+					<p:column headerText="${label['reporteProductos.tabla.saldoDisponible']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{registroProductos.saldoDisponible}" />
+					</p:column>
+					
+				</p:dataTable>					
+			</p:panelGrid>
+		</p:panel>
+						
+		<p:messages id="messages" autoUpdate="true" closable="true" />
+	</h:form>
+			
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+	 
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+	    <p:graphicImage name="ajax-loader.gif" />
+	</p:dialog>
+</h:body>
+</html>

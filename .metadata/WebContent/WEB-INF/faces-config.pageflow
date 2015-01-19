@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf14160091774000" configfile="/sioProject/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="*" id="pf14165268654913" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf14165268654914" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="paginas/principal.xhtml" id="pf14165268654915" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf14165268654914" path="/paginas/principal.xhtml"/>
+  <links id="pf14165268654914" target="pf14165268654915" source="pf14165268654913" outcome="volverMenu"/>
+</pageflow:Pageflow>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head></h:head>
+<h:body>
+	<h:form id="frmFichaTecnica">	
+		<f:loadBundle basename="sio" var="label" />
+		<p:messages id="messages" autoUpdate="true" closable="true" />					
+		<!--Campos -->				
+		<p:panel id="pnlPrincipal" header="${label['fichaTecnica.titulo']}" style="text-align: center;"/>
+		<br></br>		
+		<p:panel id="pnlProducto" header="${label['fichaTecnica.producto']}" style="margin-bottom:20px">
+			<p:panelGrid columns="3" id="infoProducto" >			
+				<p:outputLabel value="${label['fichaTecnica.codigoProducto']}" />
+				<p:inputText id="codigoProducto" value="#{fichaTecnicaBean.codigoProducto}" >
+					<p:ajax event="valueChange" update="nombreProducto,tablaComponentesAsociados"
+							listener="#{fichaTecnicaBean.consultarProductoPorCodigo}"
+							oncomplete="$(function(){PrimeFaces.focus('frmFichaTecnica:codigoComponente');});"/>
+	        	</p:inputText>        	
+				<p:outputLabel id="nombreProducto" value="#{fichaTecnicaBean.productoConsultado.nombre}" />							
+				<p:outputLabel></p:outputLabel>
+			</p:panelGrid>
+		</p:panel>		
+		<p:panel id="pnlComponente" header="${label['fichaTecnica.componente']}" style="margin-bottom:20px">
+			<p:panelGrid columns="4" id="infoComponente" >
+				<p:outputLabel value="${label['fichaTecnica.codigoComponente']}" />
+				<p:inputText id="codigoComponente" value="#{fichaTecnicaBean.codigoComponente}">
+					<p:ajax event="valueChange" update="nombreComponente,cmdAgregarComponente,cantidadComponente"
+							listener="#{fichaTecnicaBean.consultarComponentePorCodigo}"
+							oncomplete="$(function(){PrimeFaces.focus('frmFichaTecnica:cmdAgregarComponente');});"/>
+	        	</p:inputText>        	
+				<p:outputLabel id="nombreComponente" value="#{fichaTecnicaBean.componenteConsultado.nombre}" />												
+				<p:commandButton id="cmdAgregarComponente"		
+						 actionListener="#{fichaTecnicaBean.agregarComponente}"
+						 update="messages,tablaComponentesAsociados,codigoComponente,nombreComponente,cmdAgregarComponente"
+						 value="${label['fichaTecnica.boton.agregarComponentes']}"
+						 disabled="#{fichaTecnicaBean.habilitarAgregar}"
+						 oncomplete="$(function(){PrimeFaces.focus('frmFichaTecnica:codigoComponente');});">
+				</p:commandButton>						
+			</p:panelGrid>
+			<p:panelGrid columns="2" id="infoComponente1" >
+				<p:outputLabel value="${label['fichaTecnica.cantidadComponente']}" />
+				<p:inputText id="cantidadComponente" value="#{fichaTecnicaBean.cantidadComponente}" required="true"
+						 requiredMessage="${label['mensajeRequerido']}" disabled="#{fichaTecnicaBean.habilitarAgregar}"/>
+			</p:panelGrid>
+		</p:panel>
+								
+		<p:panel id="pnlTablaComponentes" header="${label['fichaTecnica.tablaComponentes']}" style="margin-bottom:20px">
+			<p:panelGrid columns="1" id="tablaComponentes">	
+				
+				<p:dataTable id="tablaComponentesAsociados"
+							 value="#{fichaTecnicaBean.listaComponentesFicha}" 
+							 var="componenteFicha" paginator="true" rows="10" 
+							 emptyMessage="${label['tabla.vacia']}" 
+							 paginatorPosition="bottom" 
+							 rowsPerPageTemplate="5,10,15"
+							 rowKey="#{componente.idProducto}"							 								 						
+							 currentPageReportTemplate="{currentPage} de {totalPages}">
+							 													       				
+					<p:column headerText="${label['tabla.codigo']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{componenteFicha.componente.codigo}" />
+					</p:column>
+					<p:column headerText="${label['tabla.nombre']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{componenteFicha.componente.nombre}" />
+					</p:column>
+					<p:column headerText="${label['tabla.unidadMedida']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{componenteFicha.componente.unidadMedida.descripcion}" />
+					</p:column>
+					<p:column headerText="${label['tabla.cantidadComponente']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{componenteFicha.cantidad}" />
+					</p:column>
+					<p:column headerText="${label['tabla.eliminar']}" style="width:15%; text-align: center;">
+						<p:commandButton id="cmdEliminarComponente" 
+							value="Eliminar" action="#{fichaTecnicaBean.eliminarItemComponente(componenteFicha)}" 
+							update="tablaComponentesAsociados"/>
+					</p:column>
+					
+				</p:dataTable>					
+			</p:panelGrid>
+		</p:panel>
+		
+		<p:panelGrid columns="2" style="text-align: center;">			
+			<p:commandButton id="cmdGuardarProducto" 
+				value="Guardar" action="#{fichaTecnicaBean.guardarFichaTecnica}" 
+				update="messages,tablaComponentesAsociados,infoComponente,infoProducto"/>							
+		</p:panelGrid>		
+	</h:form>
+	
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+	 
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+	    <p:graphicImage name="../imagenes/ajax-loader.gif" />
+	</p:dialog>
+</h:body>
+</html>

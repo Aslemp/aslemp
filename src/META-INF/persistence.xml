@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+			 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="sioPU" transaction-type="JTA">					   
+	    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+	    <jta-data-source>java:/SIO</jta-data-source>
+	    <class>sio.entidades.Producto</class>
+	    <class>sio.entidades.Proveedor</class>
+	    <class>sio.entidades.Clase</class>
+	    <class>sio.entidades.Grupo</class>
+	    <class>sio.entidades.UnidadMedida</class>
+	    <class>sio.entidades.EntradaSalidaMercancia</class>
+	    <class>sio.entidades.RegistroEntradaSalida</class>
+	    <class>sio.entidades.FichaTecnica</class>
+	    <class>sio.entidades.OrdenProduccion</class>
+	    <class>sio.entidades.SaldoReservadoOrden</class>
+	    <properties>	    	
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/> 
+	    	<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/postgres"/> 
+	    	<property name="javax.persistence.jdbc.user" value="postgres"/> 
+	    	<property name="javax.persistence.jdbc.password" value="postgres"/>
+	    	<!--  Optimization #9 - statement caching -->
+            <property name="eclipselink.jdbc.cache-statements" value="true" />  
+            <property name="eclipselink.logging.level" value="FINE"/>                                   
+            <!--  Optimization #13 - close EntityManager on commit, to avoid cost of resume -->
+            <!--<property name="eclipselink.persistence-context.close-on-commit" value="true" />-->
+            <!--  Optimization #14 - avoid auto flush cost on query execution -->
+            <!--<property name="eclipselink.persistence-context.flush-mode" value="commit" />-->
+            <!--  Optimization #15 - avoid cost of persist on commit -->
+            <!-- <property name="eclipselink.persistence-context.persist-on-commit" value="true" />-->
+         </properties>      	    	        	   	 
+	</persistence-unit>
+</persistence>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head></h:head>
+<h:body>	
+	<h:form id="frmClase">
+		<f:loadBundle basename="sio" var="label" />						
+		<!--Campos -->				
+		<p:panel id="pnlClase" header="${label['clase.titulo']}" style="text-align: center;"/>
+		
+		<p:panelGrid columns="4" id="infoClase">			
+			<p:outputLabel value="${label['clase.codigo']}" />
+			<p:inputText value="#{claseBean.clase.codigo}"/>
+			
+			<p:outputLabel value="${label['clase.nombre']}" />
+			<p:inputText value="#{claseBean.clase.nombre}"/>					
+		</p:panelGrid>
+		
+		<p:panelGrid columns="2" style="text-align: center;">			
+			<p:commandButton id="cmdGuardarClase" 
+				value="Guardar" action="#{claseBean.guardarClase}" update="messages,infoClase"/>											
+		</p:panelGrid>
+		<p:messages id="messages" autoUpdate="true" closable="true" />
+	</h:form>
+	
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+	 
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+	    <p:graphicImage name="../imagenes/ajax-loader.gif" />
+	</p:dialog>
+</h:body>
+</html>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<h:head>		
+	</h:head>
+	
+	<h:body>
+		<h:form id="frmMenu">
+			<f:loadBundle basename="sio" var="label" />		
+          	<p:layout style="min-width:1020px;max-width:1020px;min-height:600px" fullPage="true">          	
+          		<p:layoutUnit position="north" size="50" >
+          			<p:panel id="tituloSio" header="${label['titulo.sio']}" style="text-align: center;"/>          			
+          		</p:layoutUnit>                    
+	            <p:layoutUnit position="west" size="220" >
+					<p:menu id="menuPrincipal" toggleable="true">
+						<p:submenu label="Menu inventario">
+							<p:menuitem value="Producto" icon=""
+										url="/paginas/paginas_enlace/enlaceProducto.xhtml">																									
+							</p:menuitem>
+							<p:menuitem value="Proveedor" icon=""
+										url="/paginas/paginas_enlace/enlaceProveedor.xhtml">																									
+							</p:menuitem>
+							<p:menuitem value="Clase" icon=""
+										url="/paginas/paginas_enlace/enlaceClase.xhtml">																									
+							</p:menuitem>
+							<p:menuitem value="Grupo" icon=""
+										url="/paginas/paginas_enlace/enlaceGrupo.xhtml">																									
+							</p:menuitem>
+							<p:menuitem value="Unidad de medida" icon=""
+										url="/paginas/paginas_enlace/enlaceUnidadMedida.xhtml">																									
+							</p:menuitem>
+							<p:menuitem value="Entrada de mercancia" icon=""
+										url="/paginas/paginas_enlace/enlaceEntradaMercancia.xhtml">																									
+							</p:menuitem>
+							<p:menuitem value="Salida de mercancia" icon=""
+										url="/paginas/paginas_enlace/enlaceSalidaMercancia.xhtml">																									
+							</p:menuitem>
+							<p:menuitem value="Reporte entrada/salida" icon=""
+										url="/paginas/paginas_enlace/enlaceReporteEntradaSalidaMercancia.xhtml">																									
+							</p:menuitem>
+							<p:menuitem value="Reporte productos" icon=""
+										url="/paginas/paginas_enlace/enlaceReporteProductos.xhtml">																									
+							</p:menuitem>
+						</p:submenu>
+	          			<p:submenu label="Produccion" toggleable="true">
+	          				<p:menuitem value="Ficha tecnica" icon=""
+										url="/paginas/paginas_enlace/enlaceFichaTecnica.xhtml">																									
+							</p:menuitem>
+							<p:menuitem value="Orden de produccion" icon=""
+										url="/paginas/paginas_enlace/enlaceOrdenProduccion.xhtml">																									
+							</p:menuitem>
+	          			</p:submenu>
+					</p:menu>   	              
+					           	                
+	            </p:layoutUnit>  
+	            <p:layoutUnit position="center">  
+	                <ui:insert name="bodyJR"></ui:insert>
+	            </p:layoutUnit>  
+       		</p:layout>
+        </h:form> 
+        
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+	 
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+		    <p:graphicImage name="../imagenes/ajax-loader.gif" />
+		</p:dialog>       
+    </h:body>			
+		
+</html>

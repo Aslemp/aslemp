@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head></h:head>
+<h:body>
+	<h:form id="frmOrdenProduccion">	
+		<f:loadBundle basename="sio" var="label" />						
+		<!--Campos -->				
+		<p:panel id="pnlPrincipal" header="${label['ordenProduccion.titulo']}" style="text-align: center;"/>
+		<br></br>		
+		<p:panel id="pnlProducto" header="${label['ordenProduccion.producto']}" style="margin-bottom:20px">
+			<p:panelGrid columns="2" id="infoCodigoProducto" >
+				<p:outputLabel value="${label['etiquetaRequerido']} ${label['ordenProduccion.numeroOrden']}" />
+				<p:inputText value="#{ordenProduccionBean.ordenProduccion.codigo}" required="true"
+						 requiredMessage="${label['mensajeRequerido']}"/>
+			</p:panelGrid>
+			<p:panelGrid columns="3" id="infoProducto" >		
+				<p:outputLabel value="${label['etiquetaRequerido']} ${label['ordenProduccion.codigoProducto']}" />
+				<p:inputText id="codigoProducto" value="#{ordenProduccionBean.codigoProducto}" required="true"
+						 	 requiredMessage="${label['mensajeRequerido']}">
+					<p:ajax event="valueChange" update="nombreProducto,tablaComponentesAsociados,cantidadOrden"
+							listener="#{ordenProduccionBean.consultarProductoPorCodigo}"
+							oncomplete="$(function(){PrimeFaces.focus('frmOrdenProduccion:cantidadOrden');});"/>
+	        	</p:inputText> 
+	        	<p:outputLabel id="nombreProducto" value="#{ordenProduccionBean.productoConsultado.nombre}" />
+	        </p:panelGrid>
+	        <p:panelGrid columns="2" id="infoProductoCantidad" >		
+				<p:outputLabel value="${label['etiquetaRequerido']} ${label['ordenProduccion.cantidad']}" />
+				<p:inputText id="cantidadOrden" value="#{ordenProduccionBean.ordenProduccion.cantidad}" required="true"
+						 	 requiredMessage="${label['mensajeRequerido']}" 
+						 	 disabled="#{ordenProduccionBean.desactivarCantidad}">
+				<p:ajax event="valueChange" update="tablaComponentesAsociados,cmdGuardarOrdenProduccion"
+							listener="#{ordenProduccionBean.calcularCantidadOrden}"
+							oncomplete="$(function(){PrimeFaces.focus('frmOrdenProduccion:fechaInicio');});"/>
+	        	</p:inputText>
+	        </p:panelGrid>
+	        <p:panelGrid columns="4" id="infoFechaProducto" >
+	        	<p:outputLabel for="fechaInicio" value="${label['ordenProduccion.fechaInicio']}" />			
+	        	<p:calendar id="fechaInicio" value="#{ordenProduccionBean.ordenProduccion.fechaInicio}" 
+	        				showOn="button" pattern="dd-MM-yyyy"/>      	
+				
+				<p:outputLabel for="fechaEntrega" value="${label['ordenProduccion.fechaEntrega']}" />			
+	        	<p:calendar id="fechaEntrega" value="#{ordenProduccionBean.ordenProduccion.fechaEntrega}" 
+	        				showOn="button" pattern="dd-MM-yyyy"/>
+			</p:panelGrid>
+		</p:panel>		
+								
+		<p:panel id="pnlTablaComponentes" header="${label['ordenProduccion.tablaComponentes']}" style="margin-bottom:20px">
+			<p:panelGrid columns="1" id="tablaComponentes">	
+				
+				<p:dataTable id="tablaComponentesAsociados"
+							 value="#{ordenProduccionBean.listaFichaTecnicaResultado}" 
+							 var="fichatecnica" paginator="true" rows="10" 
+							 emptyMessage="${label['tabla.vacia']}" 
+							 paginatorPosition="bottom" 
+							 rowsPerPageTemplate="5,10,15"
+							 rowKey="#{componente.idProducto}"							 								 						
+							 currentPageReportTemplate="{currentPage} de {totalPages}">
+							 													       				
+					<p:column headerText="${label['tabla.codigo']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{fichatecnica.componente.codigo}" />
+					</p:column>
+					<p:column headerText="${label['tabla.nombre']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{fichatecnica.componente.nombre}" />
+					</p:column>
+					<p:column headerText="${label['tabla.unidadMedida']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{fichatecnica.componente.unidadMedida.nombre}" />
+					</p:column>
+					<p:column headerText="${label['tabla.cantidadComponente']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{fichatecnica.cantidad}" />
+					</p:column>
+					<p:column headerText="${label['tabla.cantidadTotalOrden']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{fichatecnica.componente.cantidadTotalOrden}" />
+					</p:column>
+					<p:column headerText="${label['tabla.cantidadTotalDisponible']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{fichatecnica.componente.saldoDisponible}" />
+					</p:column>
+					<p:column headerText="${label['tabla.cantidadFaltanteOrden']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{fichatecnica.componente.cantidadFaltanteOrden}" />
+					</p:column>
+					
+				</p:dataTable>					
+			</p:panelGrid>
+		</p:panel>
+		
+		<p:panelGrid columns="2" style="text-align: center;">			
+			<p:commandButton id="cmdGuardarOrdenProduccion" 
+				value="Guardar" action="#{ordenProduccionBean.guardarOrdenProduccion}" 
+				update="messages,pnlProducto,pnlTablaComponentes,infoProducto"
+				disabled="#{ordenProduccionBean.habilitarGuardar}"/>							
+		</p:panelGrid>
+		<p:messages id="messages" autoUpdate="true" closable="true" />
+	</h:form>
+	
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+	 
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+	    <p:graphicImage name="../imagenes/ajax-loader.gif" />
+	</p:dialog>
+</h:body>
+</html>

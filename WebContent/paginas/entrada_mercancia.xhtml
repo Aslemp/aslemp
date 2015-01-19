@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head></h:head>
+<h:body>	
+	<h:form id="frmEntradaMercancia">
+		<f:loadBundle basename="sio" var="label" />						
+		<!--Campos -->				
+		<p:panel id="pnlEntradaMercancia" header="${label['entradaMercancia.titulo']}" style="text-align: center;"/>
+		
+		<p:panelGrid columns="3" id="infoEntradaMercancia" style="border: none;">			
+			<p:outputLabel value="${label['entradaSalidaMercancia.codigo']}" />
+			<p:inputText value="#{entradaMercanciaBean.codigoProducto}">
+				<p:ajax event="valueChange" update="nombreProducto,unidadMedida,cmdGuardarEntradaMercancia,saldoDisponible" 
+						listener="#{entradaMercanciaBean.consultarProductoPorCodigo}"
+						oncomplete="$(function(){PrimeFaces.focus('frmEntradaMercancia:button');});"/>
+        	</p:inputText>        	
+			<p:outputLabel id="nombreProducto" value="#{entradaMercanciaBean.productoConsultado.nombre}" />
+					
+			<p:outputLabel for="button" value="${label['entradaSalidaMercancia.fechaRecibo']}" />			
+        	<p:calendar id="button" value="#{entradaMercanciaBean.entradaMercancia.fechaRecibo}" 
+        				showOn="button" pattern="dd-MM-yyyy"/>
+        	<p:outputLabel></p:outputLabel>       	
+        	        				
+			<p:outputLabel value="${label['entradaSalidaMercancia.saldoDisponible']}" />
+			<p:outputLabel id="saldoDisponible" value="#{entradaMercanciaBean.saldoVisualizar}" />
+			<p:outputLabel></p:outputLabel>
+        
+			<p:outputLabel value="${label['entradaSalidaMercancia.cantidad']}" />
+			<p:inputText value="#{entradaMercanciaBean.entradaMercancia.cantidad}"/>
+			<p:outputLabel id="unidadMedida" value="#{entradaMercanciaBean.productoConsultado.unidadMedida.nombre}" />
+		
+			<p:outputLabel value="${label['entradaSalidaMercancia.valor']}" />
+			<p:inputText value="#{entradaMercanciaBean.entradaMercancia.valor}"/>
+			<p:outputLabel></p:outputLabel>		
+			
+			<p:outputLabel value="${label['entradaSalidaMercancia.proveedor']}" />
+			<p:selectOneMenu id="listaProveedores"
+				value="#{entradaMercanciaBean.idProveedorSeleccionado}">				
+				<f:selectItem itemValue="" itemLabel="#{label['label_seleccione']}" />
+				<f:selectItems value="#{entradaMercanciaBean.listaProveedores}"
+							   var="proveedor"							
+							   itemValue="#{proveedor.idProveedor}"
+							   itemLabel="${proveedor.nombre}"/>						
+			</p:selectOneMenu>
+			<p:outputLabel></p:outputLabel>		
+			
+			<p:outputLabel value="${label['entradaSalidaMercancia.remision']}" />
+			<p:inputText value="#{entradaMercanciaBean.entradaMercancia.remision}"/>
+			<p:outputLabel></p:outputLabel>		
+			
+			<p:outputLabel value="${label['entradaSalidaMercancia.lote']}" />
+			<p:inputText value="#{entradaMercanciaBean.entradaMercancia.lote}"/>
+			<p:outputLabel></p:outputLabel>				
+		</p:panelGrid>
+				
+		<p:panelGrid columns="2" style="text-align: center;">			
+			<p:commandButton id="cmdGuardarEntradaMercancia" 
+				value="Guardar" action="#{entradaMercanciaBean.guardarEntradaMercancia}" 
+				update="messages,infoEntradaMercancia"
+				disabled="#{entradaMercanciaBean.habilitarGuardar}"/>					
+		</p:panelGrid>
+		<p:messages id="messages" autoUpdate="true" closable="true" />
+	</h:form>
+			
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+	 
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+	    <p:graphicImage name="./imagenes/ajax-loader.gif" />
+	</p:dialog>
+</h:body>
+</html>

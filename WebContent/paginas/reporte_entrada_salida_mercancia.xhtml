@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head></h:head>
+<h:body>	
+	<h:form id="frmReporteEntradaSalidaMercancia">
+		<f:loadBundle basename="sio" var="label" />						
+		<!--Campos -->				
+		<p:panel id="pnlRepEntradaSalidaMercancia" header="${label['reporteEntradaSalidaMercancia.titulo']}" style="text-align: center;"/>
+				
+		<p:panelGrid columns="3" id="infoRepEntradaSalidaMercancia" style="border: none;">			
+			<p:outputLabel value="${label['reporteEntradaSalidaMercancia.codigo']}" />
+			<p:inputText value="#{reporteEntradaSalidaMercanciaBean.codigoProducto}">
+				<p:ajax event="valueChange" update="nombreProducto,tablaReporte" 
+						listener="#{reporteEntradaSalidaMercanciaBean.consultarProductoPorCodigo}"
+						oncomplete="$(function(){PrimeFaces.focus('frmReporteEntradaSalidaMercancia:nombreProducto');});"/>
+        	</p:inputText>        	
+			<p:outputLabel id="nombreProducto" value="#{reporteEntradaSalidaMercanciaBean.productoConsultado.nombre}" />											
+		</p:panelGrid>		
+		
+		<p:calendar id="button" value="#{entradaMercanciaBean.entradaMercancia.fechaRecibo}" 
+        				showOn="button" pattern="dd-MM-yyyy"/>		
+		
+		<p:panel id="pnlTablaReporte" header="${label['reporteEntradaSalidaMercancia.tablaReporte']}" style="margin-bottom:20px">
+			<p:panelGrid columns="1" id="pnlGridTablaReporte">	
+				
+				<p:dataTable id="tablaReporte"
+							 value="#{reporteEntradaSalidaMercanciaBean.listaRegistroEntradaSalida}" 
+							 var="registroEntradaSalida" paginator="true" rows="10" 
+							 emptyMessage="${label['tabla.vacia']}" 
+							 paginatorPosition="bottom" 
+							 rowsPerPageTemplate="5,10,15"
+							 rowKey="#{registroEntradaSalida.idRegEntradaSalida}"							 								 						
+							 currentPageReportTemplate="{currentPage} de {totalPages}">
+							 													       				
+					<p:column headerText="${label['reporteEntradaSalidaMercancia.tabla.codigoProducto']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{registroEntradaSalida.producto.codigo}" />
+					</p:column>
+					<p:column headerText="${label['reporteEntradaSalidaMercancia.tabla.nombreProducto']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{registroEntradaSalida.producto.nombre}" />
+					</p:column>
+					<p:column headerText="${label['reporteEntradaSalidaMercancia.tabla.fechaRegistro']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{registroEntradaSalida.fechaRegistro}">
+							<f:convertDateTime dateStyle="full" timeZone="EST" type="date" pattern="yyyy-MM-dd"/>
+						</h:outputText>
+					</p:column>
+					<p:column headerText="${label['reporteEntradaSalidaMercancia.tabla.tipoMovimiento']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{registroEntradaSalida.tipoMovimiento}" />
+					</p:column>									
+					<p:column headerText="${label['reporteEntradaSalidaMercancia.tabla.saldoInicial']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{registroEntradaSalida.saldoInicial}" />
+					</p:column>
+					<p:column headerText="${label['reporteEntradaSalidaMercancia.tabla.cantidad']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{registroEntradaSalida.cantidad}" />
+					</p:column>
+					<p:column headerText="${label['reporteEntradaSalidaMercancia.tabla.saldoFinal']}" style="width:15%; text-align: center;">
+						<h:outputText value="#{registroEntradaSalida.saldoFinal}" />
+					</p:column>
+				</p:dataTable>					
+			</p:panelGrid>
+		</p:panel>
+						
+		<p:messages id="messages" autoUpdate="true" closable="true" />
+	</h:form>
+			
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+	 
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+	    <p:graphicImage name="../imagenes/ajax-loader.gif" />
+	</p:dialog>
+</h:body>
+</html>

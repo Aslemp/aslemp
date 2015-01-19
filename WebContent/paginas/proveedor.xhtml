@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head></h:head>
+<h:body>	
+	<h:form id="frmProveedor">
+		<f:loadBundle basename="sio" var="label" />						
+		<!--Campos -->		
+		<p:panel id="pnlProveedor" header="${label['proveedor.titulo']}" style="text-align: center;"/>
+		<p:panelGrid columns="4" id="infoProveedor">			
+			<p:outputLabel value="${label['proveedor.nombre']}" />
+			<p:inputText value="#{proveedorBean.proveedor.nombre}"/>
+			
+			<p:outputLabel value="${label['proveedor.nit']}" />
+			<p:inputText value="#{proveedorBean.proveedor.nit}"/>
+			
+			<p:outputLabel value="${label['proveedor.direccion']}" />
+			<p:inputText value="#{proveedorBean.proveedor.direccion}"/>
+			
+			<p:outputLabel value="${label['proveedor.municipio']}" />
+			<p:inputText value="#{proveedorBean.proveedor.municipio}"/>
+			
+			<p:outputLabel value="${label['proveedor.telefono']}" />
+			<p:inputText value="#{proveedorBean.proveedor.telefono}"/>
+			
+			<p:outputLabel value="${label['proveedor.correo_electronico']}" />
+			<p:inputText value="#{proveedorBean.proveedor.correoElectronico}"/>
+			
+			<p:outputLabel value="${label['proveedor.plazo_pago']}" />
+			<p:inputText value="#{proveedorBean.proveedor.plazoPago}"/>
+			
+			<p:outputLabel value="${label['proveedor.tiempo_entrega']}" />
+			<p:inputText value="#{proveedorBean.proveedor.tiempoEntrega}"/>						
+		</p:panelGrid>
+		
+		<p:panelGrid columns="2" id="infoProveedor1">			
+			<p:outputLabel value="${label['proveedor.promedio_venta']}" />
+			<p:inputText value="#{proveedorBean.proveedor.promedioVenta}"/>	
+		</p:panelGrid>
+		
+		<p:panelGrid columns="2" style="text-align: center;">			
+			<p:commandButton id="cmdGuardarProveedor" 
+				value="Guardar" action="#{proveedorBean.guardarProveedor}" update="messages,infoProveedor,infoProveedor1"/>				
+		</p:panelGrid>
+		<p:messages id="messages" autoUpdate="true" closable="true" />	
+	</h:form>
+	
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+	 
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+	    <p:graphicImage name="../imagenes/ajax-loader.gif" />
+	</p:dialog>
+</h:body>
+</html>
